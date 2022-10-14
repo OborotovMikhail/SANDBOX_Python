@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import random
 import time
 
+####################### Parameters #######################
+
 numbersRange = 10 # Range of numbers to generate (set as a parameter)
 numbersNum = 10000 # A number of numbers to generate (set as a parameter)
 
@@ -80,8 +82,6 @@ def _mult(array):
 
 
 
-####################### Main #######################
-
 
 ####################### Measuring time #######################
 
@@ -90,31 +90,31 @@ timeArray = [[], [], [], []] # Array of elapsed times
 stepLen = numNumLimit // numNumSteps # One step length
 
 # Calculating times for _min
-for step in progressbar([i for i in range(numNumSteps)], "Computing _min: ", 40):
+for step in progressbar([i for i in range(numNumSteps)], "Computing _min:  ", 40):
 	generateToFile('data.txt', numbersRange, step * stepLen)
 	data = readFromFile('data.txt')
 	clockStart = time.time_ns() # Time start
 	result = _min(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[0].append((clockEnd - clockStart) // 1000)
+	timeArray[0].append((clockEnd - clockStart) // (10 ** 6))
 
 # Calculating times for _max
-for step in progressbar([i for i in range(numNumSteps)], "Computing _max: ", 40):
+for step in progressbar([i for i in range(numNumSteps)], "Computing _max:  ", 40):
 	generateToFile('data.txt', numbersRange, step * stepLen)
 	data = readFromFile('data.txt')
 	clockStart = time.time_ns() # Time start
 	result = _max(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[1].append((clockEnd - clockStart) // 1000)
+	timeArray[1].append((clockEnd - clockStart) // (10 ** 6))
 
 # Calculating times for _sum
-for step in progressbar([i for i in range(numNumSteps)], "Computing _sum: ", 40):
+for step in progressbar([i for i in range(numNumSteps)], "Computing _sum:  ", 40):
 	generateToFile('data.txt', numbersRange, step * stepLen)
 	data = readFromFile('data.txt')
 	clockStart = time.time_ns() # Time start
 	result = _sum(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[2].append((clockEnd - clockStart) // 1000)
+	timeArray[2].append((clockEnd - clockStart) // (10 ** 6))
 
 # Calculating times for _mult
 for step in progressbar([i for i in range(numNumSteps)], "Computing _mult: ", 40):
@@ -123,7 +123,7 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _mult: ", 40
 	clockStart = time.time_ns() # Time start
 	result = _mult(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[3].append((clockEnd - clockStart) // 1000)
+	timeArray[3].append((clockEnd - clockStart) // (10 ** 6))
 
 
 # Plotting 
