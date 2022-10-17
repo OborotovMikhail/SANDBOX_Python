@@ -11,6 +11,8 @@ numbersNum = 10000 # A number of numbers to generate (set as a parameter)
 numNumLimit = 10000 # Limit of numbers in the array for elapsed time testing (set as a parameter)
 numNumSteps = 100 # Number of steps for elapsed time testing (set as a parameter)
 
+numFunc = 4 # Number of custom functions (set as a parameter)
+
 ####################### Some functions #######################
 
 # Fuction that generates numbers into a file
@@ -79,7 +81,7 @@ def _mult(array):
 	return result
 
 
-####################### Measuring time #######################
+####################### Measuring times #######################
 
 timeArray = [[] for i in range(4)] # Array of elapsed times
 
@@ -122,50 +124,43 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _mult: ", 40
 	timeArray[3].append(float((clockEnd - clockStart)) / (10. ** 6))
 
 
-# Plotting times (separately)
+####################### Plotting times #######################
+
+# Creating a figure for plotting times (separately)
 figTimes, axTimes = plt.subplots(2, 2)
 figTimes.canvas.manager.set_window_title('Time plots')
 
 howManyNums = [i * stepLen for i in range(numNumSteps)] # Array for numbers axis
 
-# Plot for _min
-axTimes[0, 0].plot(howManyNums, timeArray[0], label='Times for _min()', color='tab:blue')
-axTimes[0, 0].set_xlabel('Amount of numbers')
-axTimes[0, 0].set_ylabel('Time, ms')
-axTimes[0, 0].legend(loc='upper left')
-axTimes[0, 0].grid(linestyle='--')
+# Plotting
+axTimes[0, 0].plot(howManyNums, timeArray[0], label='Times for _min()', color='tab:blue') # Plot for _min
+axTimes[0, 1].plot(howManyNums, timeArray[1], label='Times for _max()', color='tab:orange') # Plot for _max
+axTimes[1, 0].plot(howManyNums, timeArray[2], label='Times for _sum()', color='tab:green') # Plot for _sum
+axTimes[1, 1].plot(howManyNums, timeArray[3], label='Times for _mult()', color='tab:red') # Plot for _mult
 
-# Plot for _max
-axTimes[0, 1].plot(howManyNums, timeArray[1], label='Times for _max()', color='tab:orange')
-axTimes[0, 1].set_xlabel('Amount of numbers')
-axTimes[0, 1].set_ylabel('Time, ms')
-axTimes[0, 1].legend(loc='upper left')
-axTimes[0, 1].grid(linestyle='--')
-
-# Plot for _sum
-axTimes[1, 0].plot(howManyNums, timeArray[2], label='Times for _sum()', color='tab:green')
-axTimes[1, 0].set_xlabel('Amount of numbers')
-axTimes[1, 0].set_ylabel('Time, ms')
-axTimes[1, 0].legend(loc='upper left')
-axTimes[1, 0].grid(linestyle='--')
-
-# Plot for _mult
-axTimes[1, 1].plot(howManyNums, timeArray[3], label='Times for _mult()', color='tab:red')
-axTimes[1, 1].set_xlabel('Amount of numbers')
-axTimes[1, 1].set_ylabel('Time, ms')
-axTimes[1, 1].legend(loc='upper left')
-axTimes[1, 1].grid(linestyle='--')
+# Setting plot parameters
+for i in range(numFunc):
+	axTimes[i // 2, i % 2].set_xlabel('Amount of numbers')
+	axTimes[i // 2, i % 2].set_ylabel('Time, ms')
+	axTimes[i // 2, i % 2].legend(loc='upper left')
+	axTimes[i // 2, i % 2].grid(linestyle='--')
 
 
-# Plotting times (all together)
+# Creating a figure for plotting times (all together)
 figTimesAll, axTimesAll = plt.subplots(1, 1)
 figTimesAll.canvas.manager.set_window_title('Time plots (all together)')
+
+# Plotting
 axTimesAll.plot(howManyNums, timeArray[0],  label='Times for _min()', color='tab:blue')
 axTimesAll.plot(howManyNums, timeArray[1],  label='Times for _max()', color='tab:orange')
 axTimesAll.plot(howManyNums, timeArray[2],  label='Times for _sum()', color='tab:green')
 axTimesAll.plot(howManyNums, timeArray[3],  label='Times for _mult()', color='tab:red')
+
+# Setting plot parameters
+axTimesAll.set_xlabel('Amount of numbers')
+axTimesAll.set_ylabel('Time, ms')
+axTimesAll.legend(loc='best')
 axTimesAll.grid(linestyle='--')
-axTimesAll.legend()
 
 
 # Showing all figures
