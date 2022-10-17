@@ -9,7 +9,7 @@ numbersRange = 10 # Range of numbers to generate (set as a parameter)
 numbersNum = 10000 # A number of numbers to generate (set as a parameter)
 
 numNumLimit = 10000 # Limit of numbers in the array for elapsed time testing (set as a parameter)
-numNumSteps = 1000 # Number of steps for elapsed time testing (set as a parameter)
+numNumSteps = 100 # Number of steps for elapsed time testing (set as a parameter)
 
 ####################### Some functions #######################
 
@@ -78,14 +78,10 @@ def _mult(array):
 		result *= number
 	return result
 
-####################### Main #######################
-
-
-
 
 ####################### Measuring time #######################
 
-timeArray = [[], [], [], []] # Array of elapsed times
+timeArray = [[] for i in range(4)] # Array of elapsed times
 
 stepLen = numNumLimit // numNumSteps # One step length
 
@@ -96,7 +92,7 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _min:  ", 40
 	clockStart = time.time_ns() # Time start
 	result = _min(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[0].append((clockEnd - clockStart) // (10 ** 6))
+	timeArray[0].append(float((clockEnd - clockStart)) / (10. ** 6))
 
 # Calculating times for _max
 for step in progressbar([i for i in range(numNumSteps)], "Computing _max:  ", 40):
@@ -105,7 +101,7 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _max:  ", 40
 	clockStart = time.time_ns() # Time start
 	result = _max(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[1].append((clockEnd - clockStart) // (10 ** 6))
+	timeArray[1].append(float((clockEnd - clockStart)) / (10. ** 6))
 
 # Calculating times for _sum
 for step in progressbar([i for i in range(numNumSteps)], "Computing _sum:  ", 40):
@@ -114,7 +110,7 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _sum:  ", 40
 	clockStart = time.time_ns() # Time start
 	result = _sum(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[2].append((clockEnd - clockStart) // (10 ** 6))
+	timeArray[2].append(float((clockEnd - clockStart)) / (10. ** 6))
 
 # Calculating times for _mult
 for step in progressbar([i for i in range(numNumSteps)], "Computing _mult: ", 40):
@@ -123,51 +119,54 @@ for step in progressbar([i for i in range(numNumSteps)], "Computing _mult: ", 40
 	clockStart = time.time_ns() # Time start
 	result = _mult(data) # Calculating
 	clockEnd = time.time_ns() # Time stop
-	timeArray[3].append((clockEnd - clockStart) // (10 ** 6))
+	timeArray[3].append(float((clockEnd - clockStart)) / (10. ** 6))
 
 
-# Plotting 
+# Plotting times (separately)
 figTimes, axTimes = plt.subplots(2, 2)
 figTimes.canvas.manager.set_window_title('Time plots')
 
-howManyNums = [i * stepLen for i in range(numNumSteps)]
+howManyNums = [i * stepLen for i in range(numNumSteps)] # Array for numbers axis
 
 # Plot for _min
-axTimes[0, 0].plot(howManyNums, timeArray[0])
-axTimes[0, 0].set_title('Time plot for _min()')
+axTimes[0, 0].plot(howManyNums, timeArray[0], label='Times for _min()', color='tab:blue')
 axTimes[0, 0].set_xlabel('Amount of numbers')
 axTimes[0, 0].set_ylabel('Time, ms')
-plt.grid(linestyle='--')
+axTimes[0, 0].legend(loc='upper left')
+axTimes[0, 0].grid(linestyle='--')
 
 # Plot for _max
-axTimes[0, 1].plot(howManyNums, timeArray[1])
-axTimes[0, 1].set_title('Time plot for _max()')
+axTimes[0, 1].plot(howManyNums, timeArray[1], label='Times for _max()', color='tab:orange')
 axTimes[0, 1].set_xlabel('Amount of numbers')
 axTimes[0, 1].set_ylabel('Time, ms')
-plt.grid(linestyle='--')
+axTimes[0, 1].legend(loc='upper left')
+axTimes[0, 1].grid(linestyle='--')
 
 # Plot for _sum
-axTimes[1, 0].plot(howManyNums, timeArray[2])
-axTimes[1, 0].set_title('Time plot for _sum()')
+axTimes[1, 0].plot(howManyNums, timeArray[2], label='Times for _sum()', color='tab:green')
 axTimes[1, 0].set_xlabel('Amount of numbers')
 axTimes[1, 0].set_ylabel('Time, ms')
-plt.grid(linestyle='--')
+axTimes[1, 0].legend(loc='upper left')
+axTimes[1, 0].grid(linestyle='--')
 
 # Plot for _mult
-axTimes[1, 1].plot(howManyNums, timeArray[3])
-axTimes[1, 1].set_title('Time plot for _mult()')
+axTimes[1, 1].plot(howManyNums, timeArray[3], label='Times for _mult()', color='tab:red')
 axTimes[1, 1].set_xlabel('Amount of numbers')
 axTimes[1, 1].set_ylabel('Time, ms')
-plt.grid(linestyle='--')
+axTimes[1, 1].legend(loc='upper left')
+axTimes[1, 1].grid(linestyle='--')
 
-# Plotting all together
+
+# Plotting times (all together)
 figTimesAll, axTimesAll = plt.subplots(1, 1)
 figTimesAll.canvas.manager.set_window_title('Time plots (all together)')
-axTimesAll.set_title('Time plots (all together)')
-axTimesAll.plot(howManyNums, timeArray[0],  label='_min()')
-axTimesAll.plot(howManyNums, timeArray[1],  label='_max()')
-axTimesAll.plot(howManyNums, timeArray[2],  label='_sum()')
-axTimesAll.plot(howManyNums, timeArray[3],  label='_mult()')
+axTimesAll.plot(howManyNums, timeArray[0],  label='Times for _min()', color='tab:blue')
+axTimesAll.plot(howManyNums, timeArray[1],  label='Times for _max()', color='tab:orange')
+axTimesAll.plot(howManyNums, timeArray[2],  label='Times for _sum()', color='tab:green')
+axTimesAll.plot(howManyNums, timeArray[3],  label='Times for _mult()', color='tab:red')
+axTimesAll.grid(linestyle='--')
+axTimesAll.legend()
+
 
 # Showing all figures
 plt.show()
